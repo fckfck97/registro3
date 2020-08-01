@@ -1,0 +1,40 @@
+{% extends 'obstetricia/base.html' %}
+
+{% block content %}
+  <div class="row d-flex justify-content-center">
+    <div class="col-md-4">
+      {% if errors %}
+        <div class="alert alert-warning" role="alert">
+          {% for error in errors %}
+            <span>{{ error }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if success %}
+        <div class="alert alert-success" role="alert">
+          {% for succes in success %}
+            <span>{{ succes }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <form action="{% url 'buscar_paciente' %}" method="POST" autocomplete="off">
+      {% csrf_token %}
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Búsqueda de pacientes</h4>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label for="">Nº de C.I.:</label> 
+              <input type="text" name="cedula" class="form-control" placeholder="Ingrese Nº de C.I.">
+            </div>
+          </div>
+          <div class="card-footer">
+            <input type="submit" value="Buscar" class="btn btn-primary float-right">
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+{% endblock %}

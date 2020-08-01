@@ -1,0 +1,54 @@
+{% load widget_tweaks %}
+{% load static %}
+<form method="post" action="{% url 'paciente_create' %}" class="js-paciente-form" autocomplete="off">  
+  {% csrf_token %}
+  <div class="modal-header">
+  <h4 class="modal-title">Registrar Nuevo Paciente</h4>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card-body">
+          <div class="pt-3 pb-2 mb-3 border-bottom">
+            <h5 class="h5">Datos personales</h5>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Id No Modificar:</label>
+                {{ form.cedula }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Edad:</label>
+                {{ form.edad }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Nombre:</label>
+                {{ form.nombre }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Direccion:</label>
+                {{ form.direccion }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Apellido:</label>
+                {{ form.apellido }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Telefono:</label>
+                {{ form.telefono }}
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+    <button type="submit" class="btn btn-success"> <i class="fa fa-check "></i> Guardar</button>
+  </div>
+</form>

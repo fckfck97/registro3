@@ -1,0 +1,216 @@
+{% load widget_tweaks %}
+{% load static %}
+<form method="post" action="{% url 'edit_paciente' form.instance.pk %}" class="js-paciente-form" autocomplete="off">  
+  {% csrf_token %}
+  <div class="modal-header">
+  <h4 class="modal-title">Editar Paciente Paciente</h4>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card">
+        <div class="card-body">
+          <div class="pt-3 pb-2 mb-3 border-bottom">
+            <h5 class="h5">Datos del parto</h5>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Cédula:</label>
+                {{ form.ci_paciente }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Diagnostico:</label>
+                {{ form.diagnostico }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Motivo de la Consulta:</label>
+                {{ form.motivo_consulta }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Presenta:</label>
+                {{ form.presenta }}
+              </div>
+            </div>
+          </div>
+          <div class="pt-3 pb-2 mb-3 border-bottom">
+            <h5 class="h5">Antecedentes</h5>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Gestas:</label>
+                {{ form2.gestas }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Legrados:</label>
+                {{ form2.legrados }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Partos:</label>
+                {{ form2.partos }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">FUR:</label>
+                {{ form2.fur }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Cesareas:</label>
+                {{ form2.cesareas }}
+              </div>
+            </div>
+          </div>
+          <div class="pt-3 pb-2 mb-3 border-bottom">
+            <h5 class="h5">Antecedentes Familiares</h5>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Madre:</label>
+                {{ form2.antemadre }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Hijos:</label>
+                {{ form2.antehijos }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Padre:</label>
+                {{ form2.antepadre }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Hermanos:</label>
+                {{ form2.antehermanos }}
+              </div>
+            </div>
+          </div>
+          <div class="pt-3 pb-2 mb-3 border-bottom">
+            <h5 class="h5">Antecedentes Personales</h5>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Patologia Base:</label>
+                {{ form2.patologias }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Intervenciones:</label>
+                {{ form2.intervenciones }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Alergias:</label>
+                {{ form2.alergias }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Transfusiones:</label>
+                {{ form2.transfusiones }}
+              </div>
+            </div>
+          </div>
+          <div class="pt-3 pb-2 mb-3 border-bottom">
+            <h5 class="h5">Antecedentes Gineco-Obstetricos</h5>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Menarquia:</label>
+                {{ form2.menarquia }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Numero de Parejas:</label>
+                {{ form2.parejas }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Its:</label>
+                {{ form2.its }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Sexarquia:</label>
+                {{ form2.sexarquia }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Aco:</label>
+                {{ form2.aco }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Diu:</label>
+                {{ form2.diu }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Ciclo Menstrual:</label>
+                {{ form2.ciclomens}}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Citologia:</label>
+                {{ form2.citologia }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Embarazo Anterior:</label>
+                {{ form2.embarazo_ante }}
+              </div>
+            </div>
+          </div>
+          <div class="pt-3 pb-2 mb-3 border-bottom">
+            <h5 class="h5">Embarazo Actual</h5>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Controles:</label>
+                {{ form.controles }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Controlado:</label>
+                {{ form.controlado }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Deseado:</label>
+                {{ form.deseado }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Itu:</label>
+                {{ form.itu }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Planificado:</label>
+                {{ form.planificado }}
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="{{ form.name }}">Laboratorio:</label>
+                {{ form.laboratorio }}
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+    <button type="submit" class="btn btn-success"> <i class="fa fa-check "></i> Guardar</button>
+  </div>
+</form>

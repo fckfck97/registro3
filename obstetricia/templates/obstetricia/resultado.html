@@ -1,0 +1,112 @@
+{% extends 'obstetricia/base.html' %}
+
+{% block content %} 
+  {% if paciente %}
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-12">
+        {% for paciente in paciente %}
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">
+                {{ paciente.nombre }} {{ paciente.apellido }}
+              </h4>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-3">
+                  <p><span><b>C.I.:</b> </span>{{ paciente.cedula }}</p>
+                </div>
+                <div class="col-md-3">
+                  <p><span><b>Edad:</b> </span>{{ paciente.edad }}</p>
+                </div>
+                <div class="col-md-3">
+                  <p><span><b>Dirección:</b> </span>{{ paciente.direccion }}</p>
+                </div>
+                <div class="col-md-3">
+                  <p><span><b>Registrado:</b> </span>{{ paciente.fecha }}</p>
+                  <p><span><b>Telefono:</b> </span>{{ paciente.telefono }}</p>
+                </div>
+              </div>
+
+        {% endfor %}
+            {% if parto %}
+              <table class="table table-bordered table-striped table-sm mt-4" id="edit-paciente">
+                <thead class="thead-light">
+                  <tr class="text-center">
+                    <th>Razón</th>
+                    <th>Fecha del Registro del Parto</th>
+                    <th>Nº Historia</th>
+                    <th>Motivo</th>
+                    <th>Presenta</th>
+                    <th>Diagnóstico</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  {% for parto in parto %}
+                  <tr>
+                    <td>Parto Normal</td>
+                    <td>{{ parto.fecha }}</td>
+                    <td>{{ parto.id_historia_parto }}</td>
+                    <td>{{ parto.motivo_consulta }}</td>
+                    <td>{{ parto.presenta }}</td>
+                    <td>{{ parto.diagnostico }}</td>
+                    <td>
+                      <div class="row">
+                        {% for paciente in paciente %}
+                          <div class="col-md-12 d-flex justify-content-around">
+                            <a href="{% url 'reporte_historia' pk=paciente.pk pk2=parto.pk %}" class="btn btn-rounded bg-primary text-white" data-toogle="tooltip" title="Imprimir Historia">
+                              <span data-feather="printer"></span>
+                            </a>
+                            <a href="{% url 'reporte_nota' pk=paciente.pk pk2=parto.pk %}" class="btn btn-rounded bg-primary text-white" data-toogle="tooltip" title="Imprimir Nota de parto">
+                              <span data-feather="printer"></span>
+                            </a>
+                            <a href="{% url 'reporte_consentimiento' pk=paciente.pk pk2=parto.pk %}" class="btn btn-rounded bg-primary text-white" data-toogle="tooltip" title="Imprimir consentimiento">
+                              <span data-feather="printer"></span>
+                            </a>
+                            <a href="{% url 'reporte_orden' pk=paciente.pk pk2=parto.pk %}" class="btn btn-rounded bg-primary text-white" data-toogle="tooltip" title="Imprimir Orden Medica de Parto">
+                              <span data-feather="printer"></span>
+                            </a>
+                            <a href="{% url 'reporte_examen_fisico' pk=paciente.pk pk2=parto.pk %}" class="btn btn-rounded bg-primary text-white" data-toogle="tooltip" title="Imprimir Examen Fisico">
+                              <span data-feather="printer"></span>
+                            </a>
+                            {% ifequal user.rango "Gineco Obstetra" %}
+                            {% include "obstetricia/_modal.html" %}
+                            <button type="button"
+                                  class="btn btn-warning btn-sm js-paciente-edit"
+                                  data-url="{% url 'edit_paciente' parto.id_historia_parto %}">
+                            <span class="glyphicon glyphicon-pencil"></span> Edit
+                          </button>
+                          <button type="button"
+                                  class="btn btn-danger btn-sm js-delete"
+                                  data-url="{% url 'eliminar_paciente' parto.id_historia_parto paciente.pk %}">
+                            <span class="glyphicon glyphicon-trash"></span> Delete
+                          </button>
+                            {% endifequal %}
+
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </td>
+                  </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+              </table>
+            </div>
+            <div class="card-footer">
+              <a href="{%url 'buscar_obs'%}" class="btn btn-primary float-right">Buscar otro Paciente</a>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-paciente">
+  <div class="modal-dialog mt-5">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+
+  {% endif %}
+{% endblock %}

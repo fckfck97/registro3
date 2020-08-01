@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Registro de Pacientes</title>
+    <link rel="shortcut icon" href="{% static 'img/logo.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  </head>
+  <body class="body-login">
+    {% block content %}
+    <div class="container">
+      <div class="row d-flex justify-content-center align-items-center text-center">
+        <div class="col-md-4">
+          {% if form.errors %}
+            <p>Tu Usuario y Contraseña no son correctos vuelve a intentar de nuevo.</p>
+          {% endif %}
+          <form class="form-signin" method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <img class="mb-2" src="{% static 'img/logo.svg' %}" alt="" width="100" height="100" />
+            <h1 class="h3 mb-3 font-weight-normal">Bienvenido</h1>
+            <div class="from-group mb-3 d-flex flex-column align-items-start">
+              <label for="">Usuario</label>
+              {{ form.username }}
+            </div>
+            <div class="form-group d-flex flex-column align-items-start">
+              <label for="">Contraseña</label>
+              {{ form.password }}
+            </div>
+            <button class="btn btn-primary" type="submit">
+              Entrar
+            </button>
+            <p class="mt-4 mb-3 text-muted">&copy; 2020</p>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+  </body>
+</html>

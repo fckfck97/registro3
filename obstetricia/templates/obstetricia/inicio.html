@@ -1,0 +1,26 @@
+{% extends 'obstetricia/base.html' %} 
+{% load static %}
+{% block content %}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="dra">
+				<img src="{% static 'img/dra.svg' %}" alt="" class="dra-img">
+			</div>
+			<section class="error-container">
+				<span class="four">
+					<span class="screen-reader-text">4</span>
+				</span>
+				<span class="zero">
+					<span class="screen-reader-text">0</span>
+				</span>
+				<span class="four">
+					<span class="screen-reader-text">4</span>
+				</span>
+			</section>
+			<div class="mensaje-404">
+				<p>La página a la que intentas acceder no se encuentra disponible en este momento. Presiona el botón "Volver al incio" para regresar al dashboard del sistema.</p>
+				<a href="" class="btn btn-warning">Volver al inicio</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}

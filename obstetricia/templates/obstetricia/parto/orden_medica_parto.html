@@ -1,0 +1,87 @@
+{% extends 'obstetricia/base.html' %} {% block content %}
+{% include "obstetricia/_modal.html" %}
+<div class="row d-flex justify-content-center">
+  <div class="col-md-8">
+    <form action="{% url 'orden_medica_parto' %}" method="POST" autocomplete="off">
+      {% csrf_token %}
+      {% if errors %}
+        <div class="alert alert-warning" role="alert">
+          {% for error in errors %}
+            <span>{{ error }}
+            <a class="js-paciente" title="Añadir otro paciente_obstetricia" data-url="{% url 'paciente_create' %}"><img src="/static/admin/img/icon-addlink.svg" alt="Añadir"></a></span>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if success %}
+        <div class="alert alert-warning" role="alert">
+          {% for succes in success %}
+            <span>{{ succes }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Orden Medica de parto</h4>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Cédula:</label>
+                {{ form.ci_paciente }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">3:</label>
+                {{ form.orden_tres }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">6:</label>
+                {{ form.orden_seis }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">9:</label>
+                {{ form.orden_nueve }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">1:</label>
+                {{ form.orden_uno }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">4:</label>
+                {{ form.orden_cuatro }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">7:</label>
+                {{ form.orden_siete }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">10:</label>
+                {{ form.orden_diez }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">2:</label>
+                {{ form.orden_dos }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">5:</label>
+                {{ form.orden_cinco }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">8:</label>
+                {{ form.orden_ocho }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-primary float-right" tabindex="12">Guardar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

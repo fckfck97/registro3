@@ -1,0 +1,90 @@
+{% extends 'obstetricia/base.html' %} {% block content %}
+{% include "obstetricia/_modal.html" %}
+<div class="row d-flex justify-content-center">
+  <div class="col-md-8">
+    <form action="{% url 'examen_fisico' %}" method="POST" autocomplete="off">
+      {% csrf_token %}
+      {% if errors %}
+        <div class="alert alert-warning" role="alert">
+          {% for error in errors %}
+            <span>{{ error }} <a data-url="{% url 'paciente_create' %}" class="js-paciente" title="Añadir otro paciente_obstetricia"><img src="/static/admin/img/icon-addlink.svg" alt="Añadir"></a></span>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if success %}
+        <div class="alert alert-warning" role="alert">
+          {% for succes in success %}
+            <span>{{ succes }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Examen Fisico</h4>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Cédula:</label>
+                {{ form.ci_paciente }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Fre-Respiratoria:</label>
+                {{ form.fr }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Abdomen:</label>
+                {{ form.abdomen }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Cuello Uterino:</label>
+                {{ form.cuello_uterino }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Tension Art:</label>
+                {{ form.ta }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Cardio-Pulmonar:</label>
+                {{ form.cardio_pul }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Feto:</label>
+                {{ form.feto }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Extremidades:</label>
+                {{ form.extremidades }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="{{ form.name }}">Fre-Cardiaca:</label>
+                {{ form.fc }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Mamas:</label>
+                {{ form.mamas }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Normoconfigurados:</label>
+                {{ form.normoconfigurados }}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.name }}">Neurologico:</label>
+                {{ form.neurologico }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-primary float-right" tabindex="13">Guardar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

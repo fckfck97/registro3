@@ -1,0 +1,196 @@
+{% load static %}
+<html>
+  <head>
+    {% if user.is_authenticated %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Registro de Pacientes</title>
+    <link rel="shortcut icon" href="{% static 'img/logo.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  </head>
+  <body>
+    <nav class="navbar navbar-dark fixed-top bg-nav flex-md-nowrap p-0 shadow">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/">Hpao</a>
+      {% ifequal user.genero "Hombre" %}
+      <div class="">
+        <span class="saludo">Hola Dr, {{ user.get_full_name }}</span>
+      {% else %}
+      <div class="">
+        <span class="saludo">Hola Dra, {{ user.get_full_name }}</span>
+      {% endifequal %}
+        <span data-toggle="tooltip" title="Cerrar sesión" data-placement="bottom">
+          <a href="{% url 'logout' %}" class="btn btn-nav mr-2" data-toogle="tooltip" title="Cerrar sesión">
+            <span data-feather="log-out"></span>
+          </a>
+        </span>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-nav sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="/">
+                  <span data-feather="home"></span>
+                  Inicio
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'buscar_obs' %}">
+                  <span data-feather="search"></span>
+                  Ver registros
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'index_obs' %}">
+                  <span data-feather="plus-circle"></span>
+                  Agregar paciente
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link collapsed" data-toggle="collapse" data-target="#parto" href="#">
+                  <span data-feather="file"></span>
+                  Parto
+                </a>
+                <div class="collapse submenu" id="parto" aria-expanded="false">
+                  <ul class="nav flex-column">
+                    <li class="nav-item ml-3">
+                      <a class="nav-link" href="{% url 'examen_fisico' %}">
+                        <span data-feather="clipboard"></span>
+                        Examen Fisico
+                      </a>
+                    </li>
+                    <li class="nav-item ml-3">
+                      <a class="nav-link" href="{% url 'orden_medica_parto' %}">
+                        <span data-feather="clipboard"></span>
+                        Orden Medica de Parto
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link ml-3" href="{% url 'parto_new' %}">
+                        <span data-feather="clipboard"></span>
+                        Registro de parto
+                      </a>
+                    </li>
+                    <li class="nav-item ml-3">
+                      <a class="nav-link" href="{% url 'nota_parto' %}">
+                        <span data-feather="clipboard"></span>
+                        Nota de parto
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link collapsed" data-toggle="collapse" data-target="#cesarea" href="#">
+                  <span data-feather="clipboard"></span>
+                  Cesarea
+                </a>
+                <div class="collapse submenu" id="cesarea" aria-expanded="false">
+                  <ul class="nav flex-column">
+                    <li class="nav-item">
+                      <a class="nav-link ml-3" href="#">
+                        <span data-feather="clipboard"></span>
+                        Item 1
+                      </a>
+                    </li>
+                    <li class="nav-item ml-3">
+                      <a class="nav-link" href="#">
+                        <span data-feather="clipboard"></span>
+                        Item 2
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link collapsed" data-toggle="collapse" data-target="#legrado" href="#">
+                  <span data-feather="clipboard"></span>
+                  Legrado
+                </a>
+                <div class="collapse submenu" id="legrado" aria-expanded="false">
+                  <ul class="nav flex-column">
+                    <li class="nav-item">
+                      <a class="nav-link ml-3" href="#">
+                        <span data-feather="clipboard"></span>
+                        Item 1
+                      </a>
+                    </li>
+                    <li class="nav-item ml-3">
+                      <a class="nav-link" href="#">
+                        <span data-feather="clipboard"></span>
+                        Item 2
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link collapsed" data-toggle="collapse" data-target="#histerectomia" href="#">
+                  <span data-feather="clipboard"></span>
+                  Histerectomia
+                </a>
+                <div class="collapse submenu" id="histerectomia" aria-expanded="false">
+                  <ul class="nav flex-column">
+                    <li class="nav-item">
+                      <a class="nav-link ml-3" href="#">
+                        <span data-feather="clipboard"></span>
+                        Item 1
+                      </a>
+                    </li>
+                    <li class="nav-item ml-3">
+                      <a class="nav-link" href="#">
+                        <span data-feather="clipboard"></span>
+                        Item 2
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span class="text-white">Reportes guardados</span>
+              <a class="d-flex align-items-center text-white" href="#" aria-label="Add a new report">
+                <span data-feather="plus-circle"></span>
+              </a>
+            </h6>
+            <ul class="nav flex-column mb-2">
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  Mes actual
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  Último cuarto
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <main role="main" class="col-md-10 ml-sm-auto px-4 main">
+          {% else %}
+          <a href="{% url 'login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
+          {% endif %}
+          <div class="row">
+            <div class="col-md-12">
+              {% block content %}
+              {% endblock %}
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <script src="{% static 'js/jquery-3.5.1.js' %}"></script>
+    <script src="{% static 'js/feather.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+    <script src="{% static 'js/modal.js' %}"></script>
+  </body>
+</html>
