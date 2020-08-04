@@ -17,7 +17,7 @@ from reportlab.lib.colors import pink
 from io import BytesIO
 from django.http import HttpResponse, JsonResponse
 from django.conf import settings
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, DetailView
 
 
 
@@ -185,7 +185,32 @@ class Parto_Create(LoginRequiredMixin, TemplateView):
     
 
 
+class Buscar_Paciente(DetailView):
+    template_name = "obstetricia/resultado.html"
+    model = Paciente_obstetricia, Parto
+    def post(self, request, *args, **kwargs):
+        buscar = "obstetricia/buscar_obs.html"
+        try:
+            errors = []
+            if 'cedula' in request.POST:
+                cedula = request.POST['cedula']
+                persona = Paciente_obstetricia.objects.filter(cedula=cedula).exists()
+                if not cedula:
+                    errors.append('Por favor introduce un Numero de Cedula.')
+                elif len(cedula) > 9 or len(cedula) < 7:
+                    errors.append('Por favor introduce un Numero de Cedula de entre 8 caracteres y 9 caracteres.')
+                elif persona == False:
+                    errors.append("No existe un Paciente con el numero de cedula %s proceda a registrarlo."%cedula)
+                else:
+                    paciente = Paciente_obstetricia.objects.filter(cedula=cedula)
+                    for p in paciente:
+                        parto = Parto.objects.all().filter(ci_paciente_id=p.id)
+            return render(request, self.template_name, {'paciente': paciente,'parto':parto}) 
+        except:
+            return render(request,buscar, {'errors': errors})
+        
 
+        
 @login_required
 def buscar_paciente(request):   
     errors = []

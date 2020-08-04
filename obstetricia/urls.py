@@ -12,7 +12,7 @@ urlpatterns = [
 
     path('examen_fisico/', views.Examen_Fisico_Create.as_view(), name='examen_fisico'),
     path('buscar/', views.Buscar.as_view(), name='buscar_obs'),
-    path('buscar/resultado/',views.buscar_paciente, name='buscar_paciente'),
+    path('buscar/resultado/',views.Buscar_Paciente.as_view(), name='buscar_paciente'),
     path('reporte_examen_fisico/<int:pk>/<int:pk2>/', views.reporte_examen_fisico, name='reporte_examen_fisico'),
     #Urls de parto normal
     path('parto/new/',views.Parto_Create.as_view() , name='parto_new'),
