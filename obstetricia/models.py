@@ -81,6 +81,9 @@ class Parto(models.Model):
 	class Meta:
 		ordering = ["-ci_paciente"]
 
+	def get_absolute_url(self):
+		return reverse('parto_new')
+	
 	def __str__(self):
 		return str(self.id_historia_parto)
 		
@@ -109,6 +112,9 @@ class Nota(models.Model):
 	class Meta:
 		ordering = ["-ci_paciente"]
 
+	def get_absolute_url(self):
+		return reverse('nota_parto')
+
 	def __str__(self):
 		return str(self.id_historia_nota_parto)
 
@@ -135,6 +141,9 @@ class Orden_medica_parto(models.Model):
 	rango3 = models.CharField(max_length=30,blank=True,null=True)
 	class Meta:
 		ordering = ["-ci_paciente"]
+
+	def get_absolute_url(self):
+		return reverse('orden_medica_parto')
 
 	def __str__(self):
 		return str(self.id_orden_medica_parto)

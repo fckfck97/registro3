@@ -11,11 +11,11 @@ urlpatterns = [
     path('agregar/paciente/', views.paciente_create, name='paciente_create'),
 
     path('examen_fisico/', views.Examen_Fisico_Create.as_view(), name='examen_fisico'),
-    path('buscar/', views.buscar_obs, name='buscar_obs'),
+    path('buscar/', views.Buscar.as_view(), name='buscar_obs'),
     path('buscar/resultado/',views.buscar_paciente, name='buscar_paciente'),
     path('reporte_examen_fisico/<int:pk>/<int:pk2>/', views.reporte_examen_fisico, name='reporte_examen_fisico'),
     #Urls de parto normal
-    path('parto/new/',views.parto_new , name='parto_new'),
+    path('parto/new/',views.Parto_Create.as_view() , name='parto_new'),
     path('parto/orden_medica_parto/',views.Orden_Medica_Parto_Create.as_view(), name='orden_medica_parto'),
     path('parto/nota/',views.Nota_Parto_Create.as_view(), name='nota_parto'),
     #url pdf parto normal

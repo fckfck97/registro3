@@ -5,6 +5,7 @@ from .forms import Paciente_obstetriciaForm,PartoForm,NotaForm,OrdenForm,Anteced
 from .models import Paciente_obstetricia,Parto,Nota,Orden_medica_parto,Antecedentes,Examen_fisico
 #decorador de login para porder ver las vistas si se esta logeado en el sistema
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 #libreria para la generacion del pdf
 from reportlab.lib.enums import TA_JUSTIFY,TA_CENTER,TA_RIGHT
 from reportlab.lib.pagesizes import letter
@@ -20,13 +21,33 @@ from django.views.generic import TemplateView, CreateView
 
 
 
-class Inicio(TemplateView):
+class Inicio(LoginRequiredMixin, TemplateView):
     template_name = 'obstetricia/inicio.html'
 
-class Paciente_Create(CreateView):
+class Buscar(LoginRequiredMixin,TemplateView):
+    template_name = 'obstetricia/buscar_obs.html'
+
+class Paciente_Create(LoginRequiredMixin, CreateView):
     template_name = 'obstetricia/index_obs.html'    
     model = Paciente_obstetricia
     form_class = Paciente_obstetriciaForm
+    def post(self, request, *args, **kwargs):
+        success = []
+        errors = []
+        form = self.form_class()
+        form_data = request.POST or None
+        form_post = self.form_class(form_data)
+        if request.method == 'POST':
+            if 'cedula' in request.POST:
+                ci_paciente = request.POST['cedula']
+                persona = Paciente_obstetricia.objects.filter(cedula=ci_paciente).exists()
+                if persona ==  True:
+                    errors.append("Ya existe un Paciente Registrado con ese Numero de Cedula %s"%ci_paciente)
+                else:
+                    self.form_valid(form_post)
+                    success.append('Se han Guardado los Datos Correctamente')
+            
+            return render(request, self.template_name, {'form': form,'success':success,'errors':errors})
     
     def form_valid(self, form):
         formatted_date = dateformat.format(timezone.now(), 'Y-m-d h:m:s')
@@ -34,74 +55,136 @@ class Paciente_Create(CreateView):
         self.object.fecha = formatted_date
         return super(Paciente_Create, self).form_valid(form)
 
-class Examen_Fisico_Create(CreateView):
+class Examen_Fisico_Create(LoginRequiredMixin, CreateView):
     template_name = 'obstetricia/examen_fisico.html'    
     model = Examen_fisico
     form_class = Examen_fisicoForm
-    
+    def post(self, request, *args, **kwargs):
+        success = []
+        errors = []
+        form = self.form_class()
+        form_data = request.POST or None
+        form_post = self.form_class(form_data)
+        if request.method == 'POST':
+            if 'ci_paciente' in request.POST:
+                ci_paciente = request.POST['ci_paciente']
+                persona = Paciente_obstetricia.objects.filter(cedula=ci_paciente).exists()
+                if persona ==  True:
+                    cedula_id = Paciente_obstetricia.objects.get(cedula=ci_paciente)
+                    request.POST._mutable = True
+                    request.POST['ci_paciente'] = cedula_id.id
+                    request.POST._mutable = False
+                    self.form_valid(form_post)
+                    success.append('Se han Guardado los Datos Correctamente')
+                else:
+                    errors.append("Paciente C.I:%s. No esta registrada procede a registrarla"%ci_paciente)
+                    form = self.form_class()
+            
+            return render(request, self.template_name, {'form': form,'success':success,'errors':errors})
+
     def form_valid(self, form):
         formatted_date = dateformat.format(timezone.now(), 'Y-m-d h:m:s')
         self.object = form.save(commit=False)
         self.object.fecha = formatted_date
+        self.object.medico_nombre = self.request.user.first_name
+        self.object.medico_apellido = self.request.user.last_name
+        self.object.genero = self.request.user.genero
+        self.object.rango = self.request.user.rango
         return super(Examen_Fisico_Create, self).form_valid(form)
 
-class Nota_Parto_Create(CreateView):
+class Nota_Parto_Create(LoginRequiredMixin ,CreateView):
     template_name = 'obstetricia/parto/nota_parto.html'    
     model = Nota
     form_class = NotaForm
-    
+    def post(self, request, *args, **kwargs):
+        success = []
+        errors = []
+        form = self.form_class()
+        form_data = request.POST or None
+        form_post = self.form_class(form_data)
+        if request.method == 'POST':
+            if 'ci_paciente' in request.POST:
+                ci_paciente = request.POST['ci_paciente']
+                persona = Paciente_obstetricia.objects.filter(cedula=ci_paciente).exists()
+                if persona ==  True:
+                    cedula_id = Paciente_obstetricia.objects.get(cedula=ci_paciente)
+                    request.POST._mutable = True
+                    request.POST['ci_paciente'] = cedula_id.id
+                    request.POST._mutable = False
+                    self.form_valid(form_post)
+                    success.append('Se han Guardado los Datos Correctamente')
+                else:
+                    errors.append("Paciente C.I:%s. No esta registrada procede a registrarla"%ci_paciente)
+                    form = self.form_class()
+            return render(request, self.template_name, {'form': form,'success':success,'errors':errors})
+
     def form_valid(self, form):
         formatted_date = dateformat.format(timezone.now(), 'Y-m-d h:m:s')
         self.object = form.save(commit=False)
         self.object.fecha = formatted_date
+        self.object.medico_nombre = self.request.user.first_name
+        self.object.medico_apellido = self.request.user.last_name
+        self.object.genero = self.request.user.genero
+        self.object.rango = self.request.user.rango
         return super(Nota_Parto_Create, self).form_valid(form)
-
-class Orden_Medica_Parto_Create(CreateView):
+    
+class Orden_Medica_Parto_Create(LoginRequiredMixin, CreateView):
     template_name = 'obstetricia/parto/orden_medica_parto.html'    
     model = Orden_medica_parto
     form_class = OrdenForm
-    
+    def post(self, request, *args, **kwargs):
+        success = []
+        errors = []
+        form = self.form_class()
+        form_data = request.POST or None
+        form_post = self.form_class(form_data)
+        if request.method == 'POST':
+            if 'ci_paciente' in request.POST:
+                ci_paciente = request.POST['ci_paciente']
+                persona = Paciente_obstetricia.objects.filter(cedula=ci_paciente).exists()
+                if persona ==  True:
+                    cedula_id = Paciente_obstetricia.objects.get(cedula=ci_paciente)
+                    request.POST._mutable = True
+                    request.POST['ci_paciente'] = cedula_id.id
+                    request.POST._mutable = False
+                    self.form_valid(form_post)
+                    success.append('Se han Guardado los Datos Correctamente')
+                else:
+                    errors.append("Paciente C.I:%s. No esta registrada procede a registrarla"%ci_paciente)
+                    form = self.form_class()
+            return render(request, self.template_name, {'form': form,'success':success,'errors':errors})
+
     def form_valid(self, form):
         formatted_date = dateformat.format(timezone.now(), 'Y-m-d h:m:s')
         self.object = form.save(commit=False)
         self.object.fecha = formatted_date
+        self.object.medico_nombre = self.request.user.first_name
+        self.object.medico_apellido = self.request.user.last_name
+        self.object.genero = self.request.user.genero
+        self.object.rango = self.request.user.rango
+        
         return super(Orden_Medica_Parto_Create, self).form_valid(form)
 
         
+class Parto_Create(LoginRequiredMixin, TemplateView):
+    template_name = 'obstetricia/parto/parto_registro.html'
+    def dispatch(self, request, *args, **kwargs):
+        self.form = PartoForm(request.POST or None)
+        self.form2 = AntecedentesForm(request.POST or None)
+        return super().dispatch(request, *args, **kwargs)
 
-        
+    def get_context_data(self, *args, **kwargs):
+        return {'form': self.form, 'form2': self.form2}
 
-
-@login_required
-def paciente_create(request):
-    formatted_date = dateformat.format(timezone.now(), 'Y-m-d h:m:s')
-    data = dict()
-    if request.method == 'POST':
-        form = Paciente_obstetriciaForm(request.POST)
-        if form.is_valid():
-            exito = form.save(commit=False)
-            exito.fecha = formatted_date
-            exito.save()
-            data['form_is_valid'] = True
-        else:
-            data['form_is_valid'] = False
-    else:
-        form = Paciente_obstetriciaForm()
-
-    context = {'form': form}
-    data['html_form'] = render_to_string('obstetricia/index_obs2.html',
-        context,
-        request=request,
-    )
-    return JsonResponse(data)
+    def form_valid(self, form, form2):
+        formatted_date = dateformat.format(timezone.now(), 'Y-m-d h:m:s')
+        self.object = form.save(commit=False)
+        self.object2 = form2.save(commit=False)
+        self.object.fecha = formatted_date
+        return super(Parto_Create, self).form_valid(form,form2)
+    
 
 
-
-
-#Busqueda de los pacientes en obstetricia
-@login_required
-def buscar_obs(request):
-    return render(request, 'obstetricia/buscar_obs.html')
 
 @login_required
 def buscar_paciente(request):   
@@ -125,52 +208,31 @@ def buscar_paciente(request):
                 
     return render(request, 'obstetricia/buscar_obs.html', {'errors': errors})
 
-#Vistas de Parto Normal
+#vista del modal crear paciente
 @login_required
-def parto_new(request):
+def paciente_create(request):
     formatted_date = dateformat.format(timezone.now(), 'Y-m-d h:m:s')
-    errors = []
-    success = []
-    form = PartoForm(request.POST or None)
-    form2 = AntecedentesForm(request.POST or None)
+    data = dict()
     if request.method == 'POST':
-        if 'ci_paciente' in request.POST:
-            ci_paciente = request.POST['ci_paciente']
-            persona = Paciente_obstetricia.objects.filter(cedula=ci_paciente).exists()
-            if persona ==  True:
-                cedula_id = Paciente_obstetricia.objects.get(cedula=ci_paciente)
-                request.POST._mutable = True
-                request.POST['ci_paciente'] = cedula_id.id
-                request.POST._mutable = False
-            else:
-                print("no")
-
-            if persona == False:
-                errors.append("No existe un Paciente con el numero de cedula %s proceda a registrarlo."%ci_paciente)
-            elif form.is_valid():
-                tipo = Paciente_obstetricia.objects.get(pk = request.POST['ci_paciente'])
-                exito = form.save(commit=False)
-                exito2 = form2.save(commit=False)
-                exito.fecha = formatted_date
-                exito.medico_nombre = request.user.first_name
-                exito.medico_apellido = request.user.last_name
-                exito.genero = request.user.genero
-                exito.rango = request.user.rango
-                exito.save()
-                exito2.ci_paciente = tipo
-                exito2.save()
-                success.append('Se han Guardado los Datos Correctamente')
-                form = PartoForm()
-                form2 = AntecedentesForm()
-                return render(request, 'obstetricia/parto/parto_registro.html', {'form': form,'form2': form2,'success':success})
+        form = Paciente_obstetriciaForm(request.POST)
+        if form.is_valid():
+            exito = form.save(commit=False)
+            exito.fecha = formatted_date
+            exito.save()
+            data['form_is_valid'] = True
+        else:
+            data['form_is_valid'] = False
     else:
-        form = PartoForm()
-        form2 = AntecedentesForm()
-        return render(request, 'obstetricia/parto/parto_registro.html', {'form': form,'form2': form2})
+        form = Paciente_obstetriciaForm()
 
-    form = PartoForm()
-    form2 = AntecedentesForm()
-    return render(request,'obstetricia/parto/parto_registro.html',{'form': form,'form2': form2,'errors': errors})
+    context = {'form': form}
+    data['html_form'] = render_to_string('obstetricia/index_obs2.html',
+        context,
+        request=request,
+    )
+    return JsonResponse(data)
+
+#Vistas del modal de edicion
 
 @login_required
 def edit_paciente(request,pk):
@@ -200,7 +262,7 @@ def edit_paciente(request,pk):
     data['html_form'] = render_to_string('obstetricia/edit_paciente.html',context,request=request)
     return JsonResponse(data)
     
-
+#vista del modal de eliminar
 @login_required
 def eliminar_paciente(request,pk,pk2):
     paciente = get_object_or_404(Paciente_obstetricia, pk=pk2)
@@ -250,40 +312,7 @@ def eliminar_paciente(request,pk,pk2):
 
 
 
-@login_required
-def orden_medica_parto(request):
-    errors = []
-    success = []
-    form = OrdenForm(request.POST or None)
-    if request.method == 'POST':
-        if 'ci_paciente' in request.POST:
-            ci_paciente = request.POST['ci_paciente']
-            persona = Paciente_obstetricia.objects.filter(cedula=ci_paciente).exists()
-            if persona == True:
-                cedula_id = Paciente_obstetricia.objects.get(cedula=ci_paciente)
-                request.POST._mutable = True
-                request.POST['ci_paciente'] = cedula_id.id
-                request.POST._mutable = False
-            else:
-                print("no")
-            if persona == False:
-                errors.append("No existe un Paciente con el numero de cedula %s proceda a registrarlo."%ci_paciente)
-            elif form.is_valid():
-                exito = form.save(commit=False)
-                exito.medico_nombre = request.user.first_name
-                exito.medico_apellido = request.user.last_name
-                exito.genero = request.user.genero
-                exito.rango = request.user.rango
-                exito.save()
-                success.append('Se han Guardado los Datos Correctamente')
-                form = OrdenForm()
-                return render(request, 'obstetricia/parto/orden_medica_parto.html', {'form': form,'success':success})
-    else:
-        form = OrdenForm()
-        return render(request, 'obstetricia/parto/orden_medica_parto.html', {'form': form})
 
-    form = OrdenForm()
-    return render(request,'obstetricia/parto/orden_medica_parto.html',{'form': form,'errors': errors})
 #Generando el reporte en un pdf con reportlab
 
 
