@@ -8,7 +8,7 @@ urlpatterns = [
 	#urls de inicio obstetricia
     path('', views.Inicio.as_view(), name='inicio'),
     path('agregar/', views.Paciente_Create.as_view(), name='index_obs'),
-    path('agregar/paciente/', views.paciente_create, name='paciente_create'),
+    path('agregar/paciente/', views.Paciente_Modal.as_view(), name='paciente_create'),
 
     path('examen_fisico/', views.Examen_Fisico_Create.as_view(), name='examen_fisico'),
     path('buscar/', views.Buscar.as_view(), name='buscar_obs'),
@@ -24,7 +24,7 @@ urlpatterns = [
     path('parto/consentimiento/<int:pk>/<int:pk2>/', views.reporte_consentimiento, name='reporte_consentimiento'),
     path('parto/orden_medica/<int:pk>/<int:pk2>/', views.reporte_orden, name='reporte_orden'),
     path('parto/edit/<int:pk>/', views.edit_paciente,name='edit_paciente'),
-    path('parto/eliminar/<int:pk>/<int:pk2>/', views.eliminar_paciente,name='eliminar_paciente')
+    path('parto/eliminar/<int:pk>/<int:pk2>/', views.Eliminar_Paciente.as_view(),name='eliminar_paciente')
 
 
     ]

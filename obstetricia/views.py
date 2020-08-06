@@ -17,7 +17,7 @@ from reportlab.lib.colors import pink
 from io import BytesIO
 from django.http import HttpResponse, JsonResponse
 from django.conf import settings
-from django.views.generic import TemplateView, CreateView, DetailView
+from django.views.generic import TemplateView, CreateView, DetailView,DeleteView
 
 
 
@@ -211,51 +211,35 @@ class Buscar_Paciente(DetailView):
         
 
         
-@login_required
-def buscar_paciente(request):   
-    errors = []
-    if 'cedula' in request.POST:
-        cedula = request.POST['cedula']
-        persona = Paciente_obstetricia.objects.filter(cedula=cedula).exists()
-        if not cedula:
-            errors.append('Por favor introduce un Numero de Cedula.')
-        elif len(cedula) > 9 or len(cedula) < 7:
-            errors.append('Por favor introduce un Numero de Cedula de entre 8 caracteres y 9 caracteres.')
-        elif persona == False:
-            errors.append("No existe un Paciente con el numero de cedula %s proceda a registrarlo."%cedula)
+class Paciente_Modal(CreateView):
+    template_name = "obstetricia/index_obs2.html"
+    form_class = Paciente_obstetriciaForm
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        data = dict()
+        form_data = request.POST or None
+        form_post = self.form_class(form_data)
+        if request.method == 'POST':
+            if 'ci_paciente' in request.POST:
+                ci_paciente = request.POST['ci_paciente']
+                persona = Paciente_obstetricia.objects.filter(cedula=ci_paciente).exists()
+                if persona ==  False:
+                    self.form_valid(form_post)
+                    data['form_is_valid'] = True
+                else:
+                    data['form_is_valid'] = False
         else:
-            paciente = Paciente_obstetricia.objects.filter(cedula=cedula)
-            for p in paciente:
-                parto = Parto.objects.all().filter(ci_paciente_id=p.id)
-            
-            return render(request, 'obstetricia/resultado.html',{'paciente': paciente,'parto': parto})
-                
-                
-    return render(request, 'obstetricia/buscar_obs.html', {'errors': errors})
-
-#vista del modal crear paciente
-@login_required
-def paciente_create(request):
-    formatted_date = dateformat.format(timezone.now(), 'Y-m-d h:m:s')
-    data = dict()
-    if request.method == 'POST':
-        form = Paciente_obstetriciaForm(request.POST)
-        if form.is_valid():
-            exito = form.save(commit=False)
-            exito.fecha = formatted_date
-            exito.save()
-            data['form_is_valid'] = True
-        else:
-            data['form_is_valid'] = False
-    else:
-        form = Paciente_obstetriciaForm()
-
-    context = {'form': form}
-    data['html_form'] = render_to_string('obstetricia/index_obs2.html',
-        context,
-        request=request,
-    )
-    return JsonResponse(data)
+            form =self.form_class()
+        
+        context = {'form': form}
+        data['html_form'] = render_to_string(self.template_name,context,request=request,)
+        return JsonResponse(data)
+    
+    def form_valid(self, form):
+        formatted_date = dateformat.format(timezone.now(), 'Y-m-d h:m:s')
+        self.object = form.save(commit=False)
+        self.object.fecha = formatted_date
+        return super(Paciente_Modal, self).form_valid(form)
 
 #Vistas del modal de edicion
 
@@ -286,7 +270,56 @@ def edit_paciente(request,pk):
     context = {'form': form,'form2':form2}
     data['html_form'] = render_to_string('obstetricia/edit_paciente.html',context,request=request)
     return JsonResponse(data)
-    
+
+class Eliminar_Paciente(DeleteView):
+    template_name = "obstetricia/eliminar_paciente.html"
+    def get(self, request,pk,pk2,*args, **kwargs):
+        paciente = get_object_or_404(Paciente_obstetricia, pk=pk2)
+        parto = get_object_or_404(Parto, pk=pk)
+        inst = Parto.objects.filter(id_historia_parto=pk).exists()
+        inst2 = Antecedentes.objects.filter(id_antecedentes=pk).exists()
+        inst3 = Nota.objects.filter(id_historia_nota_parto=pk).exists()
+        inst4 = Orden_medica_parto.objects.filter(id_orden_medica_parto=pk).exists()
+        inst5 = Examen_fisico.objects.filter(id_examen_fisico=pk).exists()
+        data = dict()
+        if request.method == 'POST':
+            if inst == True:
+                instancia = Parto.objects.get(id_historia_parto=pk) 
+                instancia.delete()        
+            else:
+                print("no")
+            if inst2 == True:
+                instancia2 = Antecedentes.objects.get(id_antecedentes=pk)
+                instancia2.delete()
+            else:
+                print("no")
+            if inst3 == True:
+                instancia3 = Nota.objects.get(id_historia_nota_parto=pk) 
+                instancia3.delete()        
+            else:
+                print("no")
+            if inst4 == True:
+                instancia4 = Orden_medica_parto.objects.get(id_orden_medica_parto=pk)
+                instancia4.delete()         
+            else:
+                print("no")
+            if inst5 == True:
+                instancia5 = Examen_fisico.objects.get(id_examen_fisico=pk)
+                instancia5.delete()         
+            else:
+                print("no")
+
+            data['form_is_valid'] = True  # This is just to play along with the existing code
+            return redirect('buscar_obs')
+        else:
+            context = {'paciente':paciente,'parto':parto}
+            data['html_form'] = render_to_string('obstetricia/eliminar_paciente.html',
+                context,
+                request=request,
+            )
+        return JsonResponse(data)
+
+        
 #vista del modal de eliminar
 @login_required
 def eliminar_paciente(request,pk,pk2):

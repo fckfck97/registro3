@@ -2,6 +2,20 @@
 {% load static %}
 <form method="post" action="{% url 'paciente_create' %}" class="js-paciente-form" autocomplete="off">  
   {% csrf_token %}
+  {% if errors %}
+        <div class="alert alert-warning" role="alert">
+          {% for error in errors %}
+            <span>{{ error }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if success %}
+        <div class="alert alert-warning" role="alert">
+          {% for succes in success %}
+            <span>{{ succes }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
   <div class="modal-header">
   <h4 class="modal-title">Registrar Nuevo Paciente</h4>
   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
