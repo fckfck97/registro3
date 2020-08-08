@@ -173,15 +173,46 @@ class Parto_Create(LoginRequiredMixin, TemplateView):
         self.form2 = AntecedentesForm(request.POST or None)
         return super().dispatch(request, *args, **kwargs)
 
+    def post(self,request,*args,**kwargs):
+        formatted_date = dateformat.format(timezone.now(), 'Y-m-d h:m:s')
+        errors=[]
+        success=[]
+        form = self.form
+        form2 = self.form2
+        if request.method == 'POST':
+            if 'ci_paciente' in request.POST:
+                ci_paciente = request.POST['ci_paciente']
+                persona = Paciente_obstetricia.objects.filter(cedula=ci_paciente).exists()
+                if persona ==  True:
+                    cedula_id = Paciente_obstetricia.objects.get(cedula=ci_paciente)
+                    request.POST._mutable = True
+                    request.POST['ci_paciente'] = cedula_id.id
+                    request.POST._mutable = False
+                    if form.is_valid():
+                        tipo = Paciente_obstetricia.objects.get(pk = request.POST['ci_paciente'])
+                        exito = self.form.save(commit=False)
+                        exito2 = self.form2.save(commit=False)
+                        exito.fecha = formatted_date
+                        exito.medico_nombre = request.user.first_name
+                        exito.medico_apellido = request.user.last_name
+                        exito.genero = request.user.genero
+                        exito.rango = request.user.rango
+                        exito.save()
+                        exito2.ci_paciente = tipo
+                        exito2.save()
+                        success.append('Se han Guardado los Datos Correctamente')
+                        form = PartoForm()
+                        form2 = AntecedentesForm()
+                else:
+                    errors.append("Paciente C.I:%s. No esta registrada procede a registrarla"%ci_paciente)
+                    form = self.form
+                    form2 = self.form2
+            return render(request, self.template_name, {'form': form,'form2':form2,'success':success,'errors':errors})
+    
     def get_context_data(self, *args, **kwargs):
         return {'form': self.form, 'form2': self.form2}
 
-    def form_valid(self, form, form2):
-        formatted_date = dateformat.format(timezone.now(), 'Y-m-d h:m:s')
-        self.object = form.save(commit=False)
-        self.object2 = form2.save(commit=False)
-        self.object.fecha = formatted_date
-        return super(Parto_Create, self).form_valid(form,form2)
+
     
 
 
@@ -273,7 +304,8 @@ def edit_paciente(request,pk):
 
 class Eliminar_Paciente(DeleteView):
     template_name = "obstetricia/eliminar_paciente.html"
-    def get(self, request,pk,pk2,*args, **kwargs):
+
+    def post(self, request,pk,pk2,*args, **kwargs):
         paciente = get_object_or_404(Paciente_obstetricia, pk=pk2)
         parto = get_object_or_404(Parto, pk=pk)
         inst = Parto.objects.filter(id_historia_parto=pk).exists()
@@ -310,7 +342,6 @@ class Eliminar_Paciente(DeleteView):
                 print("no")
 
             data['form_is_valid'] = True  # This is just to play along with the existing code
-            return redirect('buscar_obs')
         else:
             context = {'paciente':paciente,'parto':parto}
             data['html_form'] = render_to_string('obstetricia/eliminar_paciente.html',
@@ -319,56 +350,8 @@ class Eliminar_Paciente(DeleteView):
             )
         return JsonResponse(data)
 
-        
-#vista del modal de eliminar
-@login_required
-def eliminar_paciente(request,pk,pk2):
-    paciente = get_object_or_404(Paciente_obstetricia, pk=pk2)
-    parto = get_object_or_404(Parto, pk=pk)
-    inst = Parto.objects.filter(id_historia_parto=pk).exists()
-    inst2 = Antecedentes.objects.filter(id_antecedentes=pk).exists()
-    inst3 = Nota.objects.filter(id_historia_nota_parto=pk).exists()
-    inst4 = Orden_medica_parto.objects.filter(id_orden_medica_parto=pk).exists()
-    inst5 = Examen_fisico.objects.filter(id_examen_fisico=pk).exists()
-    data = dict()
-    if request.method == 'POST':
-        if inst == True:
-            instancia = Parto.objects.get(id_historia_parto=pk) 
-            instancia.delete()        
-        else:
-            print("no")
-        if inst2 == True:
-            instancia2 = Antecedentes.objects.get(id_antecedentes=pk)
-            instancia2.delete()
-        else:
-            print("no")
-        if inst3 == True:
-            instancia3 = Nota.objects.get(id_historia_nota_parto=pk) 
-            instancia3.delete()        
-        else:
-            print("no")
-        if inst4 == True:
-            instancia4 = Orden_medica_parto.objects.get(id_orden_medica_parto=pk)
-            instancia4.delete()         
-        else:
-            print("no")
-        if inst5 == True:
-            instancia5 = Examen_fisico.objects.get(id_examen_fisico=pk)
-            instancia5.delete()         
-        else:
-            print("no")
-
-        data['form_is_valid'] = True  # This is just to play along with the existing code
-        return redirect('buscar_obs')
-    else:
-        context = {'paciente':paciente,'parto':parto}
-        data['html_form'] = render_to_string('obstetricia/eliminar_paciente.html',
-            context,
-            request=request,
-        )
-    return JsonResponse(data)
-
-
+    def get(self, request,pk,pk2,*args, **kwargs):
+        return self.post(request,pk,pk2,*args, **kwargs)
 
 
 #Generando el reporte en un pdf con reportlab
