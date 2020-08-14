@@ -213,9 +213,6 @@ class Parto_Create(LoginRequiredMixin, TemplateView):
         return {'form': self.form, 'form2': self.form2}
 
 
-    
-
-
 class Buscar_Paciente(DetailView):
     template_name = "obstetricia/resultado.html"
     model = Paciente_obstetricia, Parto
@@ -273,7 +270,6 @@ class Paciente_Modal(CreateView):
         return super(Paciente_Modal, self).form_valid(form)
 
 #Vistas del modal de edicion
-
 @login_required
 def edit_paciente(request,pk):
     formatted_date = dateformat.format(timezone.now(), 'Y-m-d h:m:s')
