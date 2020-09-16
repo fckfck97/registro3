@@ -28,7 +28,7 @@ $(function () {
         if (data.form_is_valid) {
 
           $("#modal-paciente").modal("hide");
-          alert('F5 actualiza la pagina');
+          location.reload();
         }
         else {
           $("#modal-paciente .modal-content").html(data.html_form);

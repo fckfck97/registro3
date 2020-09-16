@@ -57,7 +57,6 @@ class Paciente_Create(LoginRequiredMixin, CreateView):
 
 class Examen_Fisico_Create(LoginRequiredMixin, CreateView):
     template_name = 'obstetricia/examen_fisico.html'    
-    model = Examen_fisico
     form_class = Examen_fisicoForm
     def post(self, request, *args, **kwargs):
         success = []
@@ -84,7 +83,7 @@ class Examen_Fisico_Create(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         formatted_date = dateformat.format(timezone.now(), 'Y-m-d h:m:s')
-        self.object = form.save(commit=False)
+        self.object = form.save()
         self.object.fecha = formatted_date
         self.object.medico_nombre = self.request.user.first_name
         self.object.medico_apellido = self.request.user.last_name
@@ -242,26 +241,28 @@ class Buscar_Paciente(DetailView):
 class Paciente_Modal(CreateView):
     template_name = "obstetricia/index_obs2.html"
     form_class = Paciente_obstetriciaForm
-    def get(self, request, *args, **kwargs):
-        form = self.form_class()
+    def post(self, request, *args, **kwargs):
         data = dict()
-        form_data = request.POST or None
-        form_post = self.form_class(form_data)
         if request.method == 'POST':
+            form_data = request.POST or None
+            form = self.form_class(form_data)
             if 'ci_paciente' in request.POST:
                 ci_paciente = request.POST['ci_paciente']
                 persona = Paciente_obstetricia.objects.filter(cedula=ci_paciente).exists()
                 if persona ==  False:
-                    self.form_valid(form_post)
                     data['form_is_valid'] = True
+                    self.form_valid(form)                    
                 else:
                     data['form_is_valid'] = False
+                    form =self.form_class()
         else:
-            form =self.form_class()
-        
-        context = {'form': form}
-        data['html_form'] = render_to_string(self.template_name,context,request=request,)
-        return JsonResponse(data)
+            form = self.form_class()
+            context = {'form': form}
+            data['html_form'] = render_to_string(self.template_name,context,request=request,)
+            return JsonResponse(data)
+    
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
     
     def form_valid(self, form):
         formatted_date = dateformat.format(timezone.now(), 'Y-m-d h:m:s')
@@ -337,7 +338,7 @@ class Eliminar_Paciente(DeleteView):
             else:
                 print("no")
 
-            data['form_is_valid'] = True  # This is just to play along with the existing code
+            data['form_is_valid'] = True  
         else:
             context = {'paciente':paciente,'parto':parto}
             data['html_form'] = render_to_string('obstetricia/eliminar_paciente.html',
@@ -397,6 +398,8 @@ def reporte_historia(request,pk=None,pk2=None):
                         pp.itu = "Si"
                     else:
                         pp.itu = "No"
+                    if pa.fur == "impresisa":
+                        pa.fur = "Ultima Regla Impresisa"
                     response = HttpResponse(content_type='application/pdf')
                     response['Content-Disposition'] = 'attachment; filename=Historia_Clinica_Ci:%s.pdf'% p.cedula
                     buff = BytesIO()
@@ -900,29 +903,29 @@ def reporte_orden(request,pk=None,pk2=None):
                     Story.append(Paragraph(texto, h3))
                     Story.append(Spacer(1, 12))
 
-                    if po.orden_ocho == "":
+                    if po.orden_ocho == "None":
                         texto = ""
                         Story.append(Paragraph(texto, h3))
                         Story.append(Spacer(1,1))
                     else:
-                        texto = u'8.- %s .'% po.orden_ocho
+                        texto = u'8.- %s.'% po.orden_ocho
                         Story.append(Paragraph(texto, h3))
                         Story.append(Spacer(1, 12))
-                    if po.orden_nueve == "":
+                    if po.orden_nueve == "None":
                         texto = ""
                         Story.append(Paragraph(texto, h3))
                         Story.append(Spacer(1, 1))
                     else:
-                        texto = u'9.- %s .'% po.orden_nueve
+                        texto = u'9.- %s.'% po.orden_nueve
                         Story.append(Paragraph(texto, h3))
                         Story.append(Spacer(1, 12))
                     
-                    if po.orden_diez == "":
+                    if po.orden_diez == "None" :
                         texto = ""
                         Story.append(Paragraph(texto, h3))
                         Story.append(Spacer(1, 1))
                     else:
-                        texto = u'10.- %s .'% po.orden_nueve
+                        texto = u'10.- %s.'% po.orden_nueve
                         Story.append(Paragraph(texto, h3))
                         Story.append(Spacer(1, 12))
 
@@ -1016,7 +1019,7 @@ def reporte_examen_fisico(request,pk=None,pk2=None):
                     texto = 'Feto: %s.' % (pp.feto)
                     Story.append(Paragraph(texto, h3))
                     Story.append(Spacer(1,12))
-                    texto = 'Normoconfigurados: %s.' % pp.normoconfigurados
+                    texto = 'Genitales: %s.' % pp.normoconfigurados
                     Story.append(Paragraph(texto, h3))
                     Story.append(Spacer(1,12))
                     texto = 'Cuello Uterino: %s.' % pp.cuello_uterino
