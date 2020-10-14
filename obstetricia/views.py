@@ -764,15 +764,23 @@ def reporte_nota(request,pk=None,pk2=None):
                     texto = u'6.- %s .'% pn.nota_seis
                     Story.append(Paragraph(texto, h3))
                     Story.append(Spacer(1, 12))
-
-                    texto = u'7.- %s .'% pn.nota_siete
-                    Story.append(Paragraph(texto, h3))
-                    Story.append(Spacer(1, 12))
-
-                    texto = u'8.- %s .'% pn.nota_ocho
-                    Story.append(Paragraph(texto, h3))
-                    Story.append(Spacer(1, 12))
-                    if pn.nota_nueve == "":
+                    if pn.nota_siete == None:
+                        texto = ""
+                        Story.append(Paragraph(texto, h3))
+                        Story.append(Spacer(1,1))
+                    else:
+                        texto = u'7.- %s .'% pn.nota_siete
+                        Story.append(Paragraph(texto, h3))
+                        Story.append(Spacer(1, 12))
+                    if pn.nota_ocho == None:
+                        texto = ""
+                        Story.append(Paragraph(texto, h3))
+                        Story.append(Spacer(1,1))
+                    else:
+                        texto = u'8.- %s .'% pn.nota_ocho
+                        Story.append(Paragraph(texto, h3))
+                        Story.append(Spacer(1, 12))
+                    if pn.nota_nueve == None:
                         texto = ""
                         Story.append(Paragraph(texto, h3))
                         Story.append(Spacer(1,1))
@@ -780,7 +788,7 @@ def reporte_nota(request,pk=None,pk2=None):
                         texto = u'9.- %s .'% pn.nota_nueve
                         Story.append(Paragraph(texto, h3))
                         Story.append(Spacer(1, 12))
-                    if pn.nota_diez == "":
+                    if pn.nota_diez == None:
                         texto = ""
                         Story.append(Paragraph(texto, h3))
                         Story.append(Spacer(1,1))
@@ -898,12 +906,16 @@ def reporte_orden(request,pk=None,pk2=None):
                     texto = u'6.- %s .'% po.orden_seis
                     Story.append(Paragraph(texto, h3))
                     Story.append(Spacer(1, 12))
+                    if po.orden_siete == None:
+                        texto = ""
+                        Story.append(Paragraph(texto, h3))
+                        Story.append(Spacer(1,1))    
+                    else:
+                        texto = u'7.- %s .'% po.orden_siete
+                        Story.append(Paragraph(texto, h3))
+                        Story.append(Spacer(1, 12))
 
-                    texto = u'7.- %s .'% po.orden_siete
-                    Story.append(Paragraph(texto, h3))
-                    Story.append(Spacer(1, 12))
-
-                    if po.orden_ocho == "None":
+                    if po.orden_ocho == None:
                         texto = ""
                         Story.append(Paragraph(texto, h3))
                         Story.append(Spacer(1,1))
@@ -911,7 +923,7 @@ def reporte_orden(request,pk=None,pk2=None):
                         texto = u'8.- %s.'% po.orden_ocho
                         Story.append(Paragraph(texto, h3))
                         Story.append(Spacer(1, 12))
-                    if po.orden_nueve == "None":
+                    if po.orden_nueve == None:
                         texto = ""
                         Story.append(Paragraph(texto, h3))
                         Story.append(Spacer(1, 1))
@@ -920,7 +932,7 @@ def reporte_orden(request,pk=None,pk2=None):
                         Story.append(Paragraph(texto, h3))
                         Story.append(Spacer(1, 12))
                     
-                    if po.orden_diez == "None" :
+                    if po.orden_diez == None:
                         texto = ""
                         Story.append(Paragraph(texto, h3))
                         Story.append(Spacer(1, 1))
