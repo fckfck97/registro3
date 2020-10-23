@@ -1,43 +1,85 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Registro de Pacientes</title>
-    <link rel="shortcut icon" href="{% static 'img/logo.ico' %}" type="image/x-icon">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-  </head>
-  <body class="body-login">
-    {% block content %}
-    <div class="container">
-      <div class="row d-flex justify-content-center align-items-center text-center">
-        <div class="col-md-4">
-          {% if form.errors %}
-            <p>Tu Usuario y Contraseña no son correctos vuelve a intentar de nuevo.</p>
-          {% endif %}
-          <form class="form-signin" method="POST" action="{% url 'login' %}">
-            {% csrf_token %}
-            <img class="mb-2" src="{% static 'img/logo.svg' %}" alt="" width="100" height="100" />
-            <h1 class="h3 mb-3 font-weight-normal">Bienvenido</h1>
-            <div class="from-group mb-3 d-flex flex-column align-items-start">
-              <label for="">Usuario</label>
-              {{ form.username }}
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Registro de Pacientes</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="{% static 'css/sb-admin-2.min.css'%}" rel="stylesheet">
+  <link href="{% static 'vendor/fontawesome-free/css/all.min.css'%}"rel="stylesheet" type="text/css">
+
+
+   <!-- Custom styles for this page -->
+   <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css'%}" rel="stylesheet">
+
+
+
+</head>
+
+<body class="bg-gradient-primary">
+
+  <div class="container">
+
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+
+      <div class="col-xl-10 col-lg-12 col-md-9">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+          <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+              <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+              <div class="col-lg-6">
+                <div class="p-5">
+                  <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4">Bienvenid@s!</h1>
+                  </div>
+                  <form class="form-signin" method="POST" action="{% url 'login' %}">
+                  {% csrf_token %}
+                  <img class="mb-2" src="{% static 'img/logo.svg' %}" alt="" width="100" height="100" />
+                  <h1 class="h3 mb-3 font-weight-normal">Bienvenido</h1>
+                  <div class="from-group mb-3 d-flex flex-column align-items-start">
+                    <label for="">Usuario</label>
+                    {{ form.username }}
+                  </div>
+                  <div class="form-group d-flex flex-column align-items-start">
+                    <label for="">Contraseña</label>
+                    {{ form.password }}
+                  </div>
+                  <button class="btn btn-primary" type="submit">
+                    Entrar
+                  </button>
+                  <p class="mt-4 mb-3 text-muted">&copy; 2020</p>
+                </form>
+                 
+
+                </div>
+              </div>
             </div>
-            <div class="form-group d-flex flex-column align-items-start">
-              <label for="">Contraseña</label>
-              {{ form.password }}
-            </div>
-            <button class="btn btn-primary" type="submit">
-              Entrar
-            </button>
-            <p class="mt-4 mb-3 text-muted">&copy; 2020</p>
-          </form>
+          </div>
         </div>
+
       </div>
+
     </div>
-    {% endblock %}
-  </body>
+
+  </div>
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+</body>
+
 </html>
