@@ -1,0 +1,14 @@
+{% extends 'obstetricia/base.html' %}
+{% if user.is_authenticated %}
+{% block content %} 
+    Id: {{ user.id }}
+    Nombre:{{ user.firts_name }}
+    Apellido:{{ user.last_name }}
+    Email: {{ user.email }}
+    Rango:{{ user.rango}}
+    Telefono:{{ user.telefono}}
+    Trabajo:{{ user.trabajo}}
+    Facebook:{{ user.facebook}}                
+          
+ {% endblock %}
+ {% endif %}

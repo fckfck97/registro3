@@ -6,8 +6,10 @@ from django.urls import reverse
 class Medico_obs(AbstractUser):
     genero = models.CharField(max_length=10)
     rango = models.CharField(max_length=30)
-    rango2 = models.CharField(max_length=30)
-    rango3 = models.CharField(max_length=30)
+    telefono = models.CharField(max_length=11)
+    trabajo = models.CharField(max_length=100)
+    facebook = models.CharField(max_length=20)
+
     class Meta:
         db_table = 'auth_user'
 
@@ -46,8 +48,8 @@ class Examen_fisico(models.Model):
 	medico_apellido = models.CharField(max_length=50)
 	genero = models.CharField(max_length=10)
 	rango = models.CharField(max_length=30)
-	rango2 = models.CharField(max_length=30,blank=True,null=True)
-	rango3 = models.CharField(max_length=30,blank=True,null=True)
+	telefono = models.CharField(max_length=30)
+	
 
 	class Meta:
 		ordering = ["-ci_paciente"]
@@ -76,8 +78,7 @@ class Parto(models.Model):
 	medico_apellido = models.CharField(max_length=50)
 	genero = models.CharField(max_length=10)
 	rango = models.CharField(max_length=30)
-	rango2 = models.CharField(max_length=30,blank=True,null=True)
-	rango3 = models.CharField(max_length=30,blank=True,null=True)
+	telefono = models.CharField(max_length=30)
 	class Meta:
 		ordering = ["-ci_paciente"]
 
@@ -107,8 +108,7 @@ class Nota(models.Model):
 	medico_apellido = models.CharField(max_length=50)
 	genero = models.CharField(max_length=10)
 	rango = models.CharField(max_length=30)
-	rango2 = models.CharField(max_length=30,blank=True,null=True)
-	rango3 = models.CharField(max_length=30,blank=True,null=True)
+	telefono = models.CharField(max_length=30)
 	class Meta:
 		ordering = ["-ci_paciente"]
 
@@ -137,8 +137,7 @@ class Orden_medica_parto(models.Model):
 	medico_apellido = models.CharField(max_length=50)
 	genero = models.CharField(max_length=10)
 	rango = models.CharField(max_length=30)
-	rango2 = models.CharField(max_length=30,blank=True,null=True)
-	rango3 = models.CharField(max_length=30,blank=True,null=True)
+	telefono = models.CharField(max_length=30)
 	class Meta:
 		ordering = ["-ci_paciente"]
 

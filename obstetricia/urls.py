@@ -7,6 +7,7 @@ urlpatterns = [
 
 	#urls de inicio obstetricia
     path('', views.Inicio.as_view(), name='inicio'),
+    path('perfil/<int:pk>/', views.Perfil.as_view(), name='perfil'),
     path('agregar/', views.Paciente_Create.as_view(), name='index_obs'),
     path('agregar/paciente/', views.Paciente_Modal.as_view(), name='paciente_create'),
     path('examen_fisico/', views.Examen_Fisico_Create.as_view(), name='examen_fisico'),
