@@ -1,14 +1,61 @@
 {% extends 'obstetricia/base.html' %}
 {% if user.is_authenticated %}
 {% block content %} 
-    Id: {{ user.id }}
-    Nombre:{{ user.firts_name }}
-    Apellido:{{ user.last_name }}
-    Email: {{ user.email }}
-    Rango:{{ user.rango}}
-    Telefono:{{ user.telefono}}
-    Trabajo:{{ user.trabajo}}
-    Facebook:{{ user.facebook}}                
+    
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title text-center">
+                    {{ user.first_name }}
+                    {{ user.last_name }}
+                </h4>
+              </div>
+              <div class="card-body">
+                <div class="pt-3 pb-2 mb-3 border-bottom">
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="{{ form.name }}">Id:</label>
+                        {{ user.id }}
+                    </div>
+                    <div class="form-group">
+                      <label for="{{ form.name }}">Email:</label>
+                      {{ user.email }}
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="{{ form.name }}">Rango:</label>
+                        {{ user.rango}}
+                      </div>
+                    <div class="form-group">
+                      <label for="{{ form.name }}">Teléfono:</label>
+                      {{ user.telefono}}
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="{{ form.name }}">Trabajo:</label>
+                        {{ user.trabajo}}
+                      </div>
+                    <div class="form-group">
+                      <label for="{{ form.name }}">Facebook:</label>
+                      {{ user.facebook}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                
+              </div>
+            </div>
+        </div>
+      </div>
           
  {% endblock %}
  {% endif %}
+
+
+ 

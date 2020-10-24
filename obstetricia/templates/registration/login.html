@@ -26,7 +26,7 @@
 
 </head>
 
-<body class="bg-gradient-primary">
+<body class="login-body d-flex align-items-center">
 
   <div class="container">
 
@@ -41,30 +41,40 @@
 
             <div class="row">
               <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-              <div class="col-lg-6">
+              <div class="col-lg-6 d-flex justify-content-center">
                 <div class="p-5">
                   <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4">Bienvenid@s!</h1>
+                    <h1 class="h4 text-gray-900 mb-5">Bienvenido</h1>
                   </div>
                   {% if form.errors %}
                   <p>Tu Usuario y Contraseña no son correctos vuelve a intentar de nuevo.</p>
                   {% endif %}
                   <form class="form-signin" method="POST" action="{% url 'login' %}">
                   {% csrf_token %}
-                  <img class="mb-2" src="{% static 'img/logo.svg' %}" alt="" width="100" height="100" />
-                  <h1 class="h3 mb-3 font-weight-normal">Bienvenido</h1>
-                  <div class="from-group mb-3 d-flex flex-column align-items-start">
-                    <label for="">Usuario</label>
-                    {{ form.username }}
+                  <div class="d-flex flex-column align-items-center justify-content-center">
+                    <div class="form-group mb-3">
+                      <div>
+                        <label for="">Usuario</label>
+                      </div>
+                      <div>
+                        {{ form.username }}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                     <div>
+                      <label for="">Contraseña</label>
+                     </div>
+                      <div>
+                        {{ form.password }}
+                      </div>
+                    </div>
                   </div>
-                  <div class="form-group d-flex flex-column align-items-start">
-                    <label for="">Contraseña</label>
-                    {{ form.password }}
+                  <div class="d-flex justify-content-center">
+                    <button class="btn btn-primary mt-2" type="submit">
+                      Entrar
+                    </button>
                   </div>
-                  <button class="btn btn-success" type="submit">
-                    Entrar
-                  </button>
-                  <p class="mt-4 mb-3 text-muted">&copy; 2020</p>
+                  <p class="mt-5 mb-3 text-muted text-center">Registro de Obstetricia - 2020</p>
                 </form>
                  
 
