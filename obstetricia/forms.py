@@ -69,7 +69,7 @@ class PartoForm(forms.ModelForm):
                                     })
 		self.fields['presenta'].widget = forms.TextInput(attrs={
                                         'class':'form-control',
-                                        'placeholder':'Presenta',
+                                        'placeholder':'Enfermedad Actual',
                                         'tabindex':'3'
                                     })
 		self.fields['diagnostico'].widget = forms.TextInput(attrs={
@@ -80,6 +80,8 @@ class PartoForm(forms.ModelForm):
 		self.fields['controles'].widget = forms.NumberInput(attrs={
                                         'class':'form-control',
                                         'placeholder':'Numero de Controles',
+                                        'min':'0', 
+                                        'pattern':'^[0-9]+',
                                         'tabindex':'27'
                                     })
 		self.fields['deseado'].widget = forms.NullBooleanSelect(attrs={
@@ -155,7 +157,7 @@ class AntecedentesForm(forms.ModelForm):
                                     })
 		self.fields['fur'].widget = forms.TextInput(attrs={
                                         'class':'form-control',
-										'placeholder':'01/01/2019',
+										'placeholder':'01/01/2020',
                                         'tabindex':'9'
                                     })
 		self.fields['antemadre'].widget = forms.TextInput(attrs={
@@ -222,6 +224,7 @@ class AntecedentesForm(forms.ModelForm):
                                         'class':'form-control',
                                         'placeholder':'Numero de Parejas',
                                         'min':'0',
+                                        'max':'10',
                                         'pattern':'^[0-9]+',
                                         'tabindex':'21'
                                     })
@@ -526,7 +529,7 @@ class Examen_fisicoForm(forms.ModelForm):
                                     })
         self.fields['normoconfigurados'].widget = forms.TextInput(attrs={
                                         'class':'form-control',
-                                        'placeholder':'Normoconfigurados',
+                                        'placeholder':'Vagina',
                                         'tabindex':'9'
                                         
                                     })
