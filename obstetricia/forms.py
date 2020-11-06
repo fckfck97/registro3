@@ -28,6 +28,8 @@ class Paciente_obstetriciaForm(forms.ModelForm):
 		self.fields['edad'].widget = forms.NumberInput(attrs={
                                         'class':'form-control',
                                         'placeholder':'Edad',
+                                        'min':'0', 
+                                        'pattern':'^[0-9]+',
                                         'tabindex':'4'
                                     })
 		self.fields['direccion'].widget = forms.TextInput(attrs={
@@ -152,6 +154,7 @@ class AntecedentesForm(forms.ModelForm):
 		self.fields['legrados'].widget =forms.NumberInput(attrs={
                                         'class':'form-control',
                                         'placeholder':'Numero de Legrados',
+                                        'min':'0', 
                                         'pattern':'^[0-9]+',
                                         'tabindex':'8'
                                     })

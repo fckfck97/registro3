@@ -20,7 +20,7 @@ from django.conf import settings
 from django.views.generic import TemplateView, CreateView, DetailView,DeleteView
 
 
-class Perfil(TemplateView):
+class Perfil(LoginRequiredMixin,TemplateView):
     template_name = 'obstetricia/perfil.html'
         
         
@@ -215,7 +215,7 @@ class Parto_Create(LoginRequiredMixin, TemplateView):
         return {'form': self.form, 'form2': self.form2}
 
 
-class Buscar_Paciente(DetailView):
+class Buscar_Paciente(LoginRequiredMixin,DetailView):
     template_name = "obstetricia/resultado.html"
     model = Paciente_obstetricia, Parto
     def post(self, request, *args, **kwargs):
@@ -241,7 +241,7 @@ class Buscar_Paciente(DetailView):
         
 
         
-class Paciente_Modal(CreateView):
+class Paciente_Modal(LoginRequiredMixin,CreateView):
     template_name = "obstetricia/index_obs2.html"
     form_class = Paciente_obstetriciaForm
     def post(self, request, *args, **kwargs):
@@ -302,7 +302,7 @@ def edit_paciente(request,pk):
     data['html_form'] = render_to_string('obstetricia/edit_paciente.html',context,request=request)
     return JsonResponse(data)
 
-class Eliminar_Paciente(DeleteView):
+class Eliminar_Paciente(LoginRequiredMixin,DeleteView):
     template_name = "obstetricia/eliminar_paciente.html"
 
     def post(self, request,pk,pk2,*args, **kwargs):
@@ -384,7 +384,7 @@ def reporte_historia(request,pk=None,pk2=None):
                     if pa.diu == True:
                         pa.diu = "Si"
                     else:
-                        pp.diu = "No"
+                        pa.diu = "No"
                     if pp.deseado == True:
                         pp.deseado = "Si"
                     else:
@@ -564,8 +564,6 @@ def reporte_historia(request,pk=None,pk2=None):
                         texto = '%s'%(pp.rango)
                         Story.append(Paragraph(texto, h5))
                         Story.append(Spacer(1,7))
-                        texto = 'Telefono: %s'%(pp.telefono)
-                        Story.append(Paragraph(texto, h5))
                         texto = 'Firma y Sello.'
                         Story.append(Paragraph(texto, h5))
                         Story.append(Spacer(1,7))
@@ -578,9 +576,6 @@ def reporte_historia(request,pk=None,pk2=None):
                         Story.append(Paragraph(texto, h5))
                         Story.append(Spacer(1,7))
                         texto = '%s'%(pp.rango)
-                        Story.append(Paragraph(texto, h5))
-                        Story.append(Spacer(1,7))
-                        texto = 'Telefono: %s'%(pp.telefono)
                         Story.append(Paragraph(texto, h5))
                         Story.append(Spacer(1,7))
                         texto = 'Firma y Sello.'
@@ -680,8 +675,6 @@ def reporte_consentimiento(request,pk=None,pk2=None):
                     texto = '%s'%(pp.rango)
                     Story.append(Paragraph(texto, h5))
                     Story.append(Spacer(1,7))
-                    texto = 'Telefono: %s'%(pp.telefono)
-                    Story.append(Paragraph(texto, h5))
                     texto = 'Firma y Sello.'
                     Story.append(Paragraph(texto, h5))
                     Story.append(Spacer(1,7))
@@ -693,9 +686,7 @@ def reporte_consentimiento(request,pk=None,pk2=None):
                     texto = 'Dra. %s %s'%(pp.medico_nombre,pp.medico_apellido)
                     Story.append(Paragraph(texto, h5))
                     Story.append(Spacer(1,7))
-                    texto = '%s'%(pp.rango)
-                    texto = 'Telefono: %s'%(pp.telefono)
-                    Story.append(Paragraph(texto, h5))
+                    texto = '%s'%(pp.rango)                    
                     Story.append(Paragraph(texto, h5))
                     Story.append(Spacer(1,7))
                     texto = 'Firma y Sello.'
@@ -824,8 +815,6 @@ def reporte_nota(request,pk=None,pk2=None):
                         texto = '%s'%(pn.rango)
                         Story.append(Paragraph(texto, h5))
                         Story.append(Spacer(1,7))
-                        texto = 'Telefono: %s'%(pn.telefono)
-                        Story.append(Paragraph(texto, h5))
                         texto = 'Firma y Sello.'
                         Story.append(Paragraph(texto, h5))
                         Story.append(Spacer(1,7))
@@ -838,8 +827,6 @@ def reporte_nota(request,pk=None,pk2=None):
                         Story.append(Paragraph(texto, h5))
                         Story.append(Spacer(1,7))
                         texto = '%s'%(pn.rango)
-                        Story.append(Paragraph(texto, h5))
-                        texto = 'Telefono: %s'%(pn.telefono)
                         Story.append(Paragraph(texto, h5))
                         Story.append(Spacer(1,7))
                         texto = 'Firma y Sello.'
@@ -964,8 +951,6 @@ def reporte_orden(request,pk=None,pk2=None):
                         texto = '%s'%(po.rango)
                         Story.append(Paragraph(texto, h5))
                         Story.append(Spacer(1,7))
-                        texto = 'Telefono: %s'%(po.telefono)
-                        Story.append(Paragraph(texto, h5))
                         texto = 'Firma y Sello.'
                         Story.append(Paragraph(texto, h5))
                         Story.append(Spacer(1,7))
@@ -978,8 +963,6 @@ def reporte_orden(request,pk=None,pk2=None):
                         Story.append(Paragraph(texto, h5))
                         Story.append(Spacer(1,7))
                         texto = '%s'%(po.rango)
-                        Story.append(Paragraph(texto, h5))
-                        texto = 'Telefono: %s'%(po.telefono)
                         Story.append(Paragraph(texto, h5))
                         Story.append(Spacer(1,7))
                         texto = 'Firma y Sello.'
@@ -1051,13 +1034,13 @@ def reporte_examen_fisico(request,pk=None,pk2=None):
                     texto = 'Feto: %s.' % (pp.feto)
                     Story.append(Paragraph(texto, h3))
                     Story.append(Spacer(1,12))
-                    texto = 'Genitales: %s.' % pp.normoconfigurados
+                    texto = 'Vagina: %s.' % pp.normoconfigurados
                     Story.append(Paragraph(texto, h3))
                     Story.append(Spacer(1,12))
                     texto = 'Cuello Uterino: %s.' % pp.cuello_uterino
                     Story.append(Paragraph(texto, h3))
                     Story.append(Spacer(1,12))
-                    texto = 'Extremidades Inferiores: %s.' % pp.extremidades
+                    texto = 'Extremidades: %s.' % pp.extremidades
                     Story.append(Paragraph(texto, h3))
                     Story.append(Spacer(1,12))
                     texto = 'Neurologico: %s.' % pp.neurologico
@@ -1071,8 +1054,6 @@ def reporte_examen_fisico(request,pk=None,pk2=None):
                         texto = '%s'%(pp.rango)
                         Story.append(Paragraph(texto, h5))
                         Story.append(Spacer(1,7))
-                        texto = 'Telefono: %s'%(pp.telefono)
-                        Story.append(Paragraph(texto, h5))
                         texto = 'Firma y Sello.'
                         Story.append(Paragraph(texto, h5))
                         Story.append(Spacer(1,7))
@@ -1085,8 +1066,6 @@ def reporte_examen_fisico(request,pk=None,pk2=None):
                         Story.append(Paragraph(texto, h5))
                         Story.append(Spacer(1,7))
                         texto = '%s'%(pp.rango)
-                        Story.append(Paragraph(texto, h5))
-                        texto = 'Telefono: %s'%(pp.telefono)
                         Story.append(Paragraph(texto, h5))
                         Story.append(Spacer(1,7))
                         texto = 'Firma y Sello.'
